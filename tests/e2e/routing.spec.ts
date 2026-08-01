@@ -12,9 +12,10 @@ for (const route of routes) {
   test(`opens /${route.path} directly through the Pages fallback`, async ({ page }) => {
     await page.goto(route.path);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(route.heading);
+    await expect(page.getByRole('button', { name: 'Открыть меню' })).toBeVisible();
     await expect(
       page.getByRole('navigation', { name: 'Основная навигация' }),
-    ).toBeVisible();
+    ).toHaveCount(0);
   });
 }
 
@@ -39,4 +40,23 @@ test('opens and closes the navigation drawer on a narrow screen', async ({ page 
 
   await page.keyboard.press('Escape');
   await expect(page.getByRole('button', { name: 'Открыть меню' })).toBeVisible();
+});
+
+test('opens the navigation drawer without reserving desktop main width', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('scenes');
+
+  const main = await page.locator('#main-content').boundingBox();
+  expect(main?.width).toBeGreaterThanOrEqual(1439);
+
+  await page.getByRole('button', { name: 'Открыть меню' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'Основная навигация' }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Закрыть меню' }).first().click();
+  await expect(
+    page.getByRole('navigation', { name: 'Основная навигация' }),
+  ).toHaveCount(0);
 });

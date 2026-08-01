@@ -43,7 +43,7 @@ export default function DiffPage() {
         status={<StatusBadge tone="success">Автосохранение</StatusBadge>}
       />
 
-      <div className={styles.workspace}>
+      <div className={styles.workspace} data-testid="diff-workspace">
         <div className={styles.toolbar}>
           <div className={styles.segmented} aria-label="Единица сравнения">
             <button

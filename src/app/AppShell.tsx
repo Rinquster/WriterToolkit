@@ -11,9 +11,11 @@ const navigation = [
 ] as const;
 
 export default function AppShell() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openMenuPath, setOpenMenuPath] = useState<string>();
   const location = useLocation();
+  const isMenuOpen = openMenuPath === location.pathname;
   const mainRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     mainRef.current?.focus();
@@ -26,12 +28,18 @@ export default function AppShell() {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsMenuOpen(false);
+        setOpenMenuPath(undefined);
+        window.requestAnimationFrame(() => menuButtonRef.current?.focus());
       }
     };
 
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isMenuOpen]);
 
   return (
@@ -40,26 +48,45 @@ export default function AppShell() {
         Перейти к содержимому
       </a>
 
-      <header className={styles.mobileHeader}>
+      <header className={styles.appHeader}>
         <button
+          ref={menuButtonRef}
           className={styles.menuButton}
           type="button"
           aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
           aria-expanded={isMenuOpen}
           aria-controls="primary-navigation"
-          onClick={() => setIsMenuOpen((value) => !value)}
+          onClick={() =>
+            setOpenMenuPath((value) =>
+              value === location.pathname ? undefined : location.pathname,
+            )
+          }
         >
           <span aria-hidden="true">{isMenuOpen ? '×' : '☰'}</span>
         </button>
-        <span className={styles.mobileBrand}>WriterToolkit</span>
+        <NavLink
+          className={styles.appBrand}
+          to="/scenes"
+          aria-label="WriterToolkit — документы сцен"
+          onClick={() => setOpenMenuPath(undefined)}
+        >
+          <span className={styles.appBrandMark} aria-hidden="true">
+            W
+          </span>
+          <span>WriterToolkit</span>
+        </NavLink>
       </header>
 
-      <aside className={`${styles.sidebar} ${isMenuOpen ? styles.sidebarOpen : ''}`}>
+      <aside
+        className={`${styles.sidebar} ${isMenuOpen ? styles.sidebarOpen : ''}`}
+        aria-hidden={!isMenuOpen}
+        inert={!isMenuOpen}
+      >
         <NavLink
           className={styles.brand}
           to="/scenes"
           aria-label="WriterToolkit"
-          onClick={() => setIsMenuOpen(false)}
+          onClick={() => setOpenMenuPath(undefined)}
         >
           <span className={styles.brandMark} aria-hidden="true">
             W
@@ -79,7 +106,7 @@ export default function AppShell() {
               className={({ isActive }) =>
                 `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`
               }
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => setOpenMenuPath(undefined)}
             >
               <span className={styles.navIcon} aria-hidden="true">
                 {item.shortLabel}
@@ -97,7 +124,10 @@ export default function AppShell() {
           className={styles.backdrop}
           type="button"
           aria-label="Закрыть меню"
-          onClick={() => setIsMenuOpen(false)}
+          onClick={() => {
+            setOpenMenuPath(undefined);
+            window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+          }}
         />
       )}
 

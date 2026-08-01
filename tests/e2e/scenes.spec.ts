@@ -154,6 +154,36 @@ test('undoes and redoes a grouped text edit', async ({ page }) => {
   await expect(textarea).toHaveValue('Черновая реплика');
 });
 
+test('keeps search collapsed and lets it return focus to its header control', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('scenes');
+  await page.getByRole('button', { name: 'Новый документ' }).click();
+
+  await expect(page.getByRole('search')).toHaveCount(0);
+  const openSearch = page.getByRole('button', { name: 'Открыть поиск' });
+  await openSearch.click();
+
+  const searchInput = page.getByLabel('Поиск по всем вариантам');
+  await expect(searchInput).toBeFocused();
+  await searchInput.fill('реплика');
+  await searchInput.press('Escape');
+  await expect(page.getByRole('search')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Открыть поиск' })).toBeFocused();
+
+  await page.getByRole('button', { name: 'Открыть поиск' }).click();
+  await expect(searchInput).toHaveValue('реплика');
+
+  const main = await page.locator('#main-content').boundingBox();
+  const sceneList = await page.getByTestId('scene-list').boundingBox();
+  expect(main).not.toBeNull();
+  expect(sceneList).not.toBeNull();
+  if (main && sceneList) {
+    expect(sceneList.width / main.width).toBeGreaterThan(0.9);
+  }
+});
+
 test('archives a deleted document and restores it from recovery', async ({ page }) => {
   await page.goto('scenes');
   await page.getByRole('button', { name: 'Новый документ' }).click();

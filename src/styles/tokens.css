@@ -53,7 +53,7 @@
   --space-12: 48px;
 
   --sidebar-width: 232px;
-  --mobile-header-height: 61px;
+  --app-header-height: 61px;
   --page-padding: clamp(16px, 3vw, 36px);
   --shadow-overlay: 0 24px 70px rgb(0 0 0 / 45%);
 }
