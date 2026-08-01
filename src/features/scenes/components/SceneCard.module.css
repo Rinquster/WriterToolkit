@@ -1,0 +1,294 @@
+.card {
+  position: relative;
+  scroll-margin-top: var(--space-4);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 12%);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    opacity 150ms ease;
+}
+
+.dragging {
+  z-index: 4;
+  opacity: 0.72;
+  border-color: var(--color-accent-border);
+  box-shadow: 0 18px 46px rgb(0 0 0 / 38%);
+}
+
+.dropTarget {
+  border-color: var(--color-accent);
+}
+
+.header {
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 40px 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dragHandle {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-muted);
+  font-size: 22px;
+  line-height: 1;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  cursor: grab;
+  touch-action: none;
+}
+
+.dragHandle:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.sceneNumber {
+  color: var(--color-accent-text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.titleField input {
+  width: 100%;
+  height: 42px;
+  padding: 0 var(--space-3);
+  color: var(--color-text-primary);
+  font-size: 17px;
+  font-weight: 700;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+}
+
+.titleField input:hover,
+.titleField input:focus {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-border-strong);
+}
+
+.titleField input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.sceneActions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.sceneActions button,
+.confirmation button,
+.variantConfirmation button {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0 var(--space-2);
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.sceneActions button:hover:not(:disabled),
+.confirmation button:hover,
+.variantConfirmation button:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+}
+
+.sceneActions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.28;
+}
+
+.sceneActions .deleteButton:hover:not(:disabled) {
+  color: #ffd0d0;
+  background: color-mix(in srgb, var(--color-danger) 32%, transparent);
+}
+
+.confirmation,
+.variantConfirmation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-warning-text);
+  font-size: 13px;
+  background: var(--color-warning-subtle);
+  border-bottom: 1px solid var(--color-warning-border);
+}
+
+.confirmation .dangerAction,
+.variantConfirmation .dangerAction {
+  color: #ffd0d0;
+  background: color-mix(in srgb, var(--color-danger) 35%, transparent);
+  border-color: color-mix(in srgb, var(--color-danger) 60%, transparent);
+}
+
+.body {
+  padding: var(--space-4);
+}
+
+.variantBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.variantTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.variantTabs button,
+.deleteVariant {
+  min-width: 36px;
+  min-height: 34px;
+  padding: 0 var(--space-3);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.variantTabs button:hover,
+.deleteVariant:hover:not(:disabled) {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+}
+
+.variantTabs .activeVariant {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.variantTabs .addVariant {
+  color: var(--color-accent-text);
+  background: transparent;
+  border-style: dashed;
+}
+
+.deleteVariant {
+  min-width: auto;
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  background: transparent;
+  border-color: transparent;
+}
+
+.deleteVariant:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.variantConfirmation {
+  margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) var(--space-3);
+  border-top: 1px solid var(--color-warning-border);
+}
+
+.textField textarea {
+  width: 100%;
+  min-height: 212px;
+  display: block;
+  resize: vertical;
+  padding: var(--space-4);
+  color: var(--color-text-primary);
+  line-height: 1.62;
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  caret-color: var(--color-accent-text);
+}
+
+.textField textarea:hover {
+  border-color: var(--color-border-strong);
+}
+
+.textField textarea:focus {
+  border-color: var(--color-accent-border);
+}
+
+.textField textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.textMeta {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .header {
+    grid-template-columns: 40px 32px minmax(0, 1fr);
+  }
+
+  .sceneActions {
+    grid-column: 2 / -1;
+    justify-content: flex-end;
+  }
+
+  .variantBar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .confirmation,
+  .variantConfirmation {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .confirmation span,
+  .variantConfirmation span {
+    width: 100%;
+  }
+
+  .body {
+    padding: var(--space-3);
+  }
+
+  .variantConfirmation {
+    margin: calc(var(--space-3) * -1) calc(var(--space-3) * -1) var(--space-3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}

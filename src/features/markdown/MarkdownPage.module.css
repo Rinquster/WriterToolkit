@@ -1,0 +1,332 @@
+.workspace {
+  display: grid;
+  padding-bottom: var(--space-12);
+}
+
+.topbar {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--page-padding);
+  background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.formatting,
+.fileActions,
+.previewTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.topbar button,
+.previewTabs button,
+.htmlView > button,
+.notice button,
+.modal button {
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.topbar button:hover,
+.previewTabs button:hover,
+.htmlView > button:hover,
+.modal button:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+}
+
+.topbar .dangerButton {
+  color: var(--color-warning-text);
+  background: transparent;
+  border-color: transparent;
+}
+
+.notice,
+.draftError,
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--page-padding);
+  font-size: 13px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notice {
+  color: var(--color-success-text);
+  background: var(--color-success-subtle);
+}
+
+.notice button {
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  background: transparent;
+  border-color: transparent;
+}
+
+.draftError {
+  color: var(--color-warning-text);
+  background: var(--color-warning-subtle);
+}
+
+.loading {
+  color: var(--color-text-muted);
+}
+
+.splitPane {
+  min-height: calc(100vh - 232px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.editorPane,
+.previewPane {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.editorPane {
+  border-right: 1px solid var(--color-border);
+}
+
+.paneHeader {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.paneHeader h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.paneHeader > span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.editorPane textarea {
+  min-height: 640px;
+  flex: 1;
+  resize: vertical;
+  padding: var(--space-6);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.7;
+  background: var(--color-bg-canvas);
+  border: 0;
+}
+
+.editorPane textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.previewTabs button[aria-selected='true'] {
+  color: var(--color-text-primary);
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent-border);
+}
+
+.breaksOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.markdownBody,
+.htmlView {
+  min-height: 640px;
+  padding: clamp(24px, 4vw, 52px);
+  overflow-wrap: anywhere;
+}
+
+.markdownBody {
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  line-height: 1.72;
+}
+
+.markdownBody > :first-child {
+  margin-top: 0;
+}
+
+.markdownBody h1,
+.markdownBody h2,
+.markdownBody h3,
+.markdownBody h4 {
+  margin: 1.55em 0 0.55em;
+  color: var(--color-text-primary);
+  line-height: 1.25;
+}
+
+.markdownBody h1,
+.markdownBody h2 {
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.markdownBody a {
+  color: var(--color-accent-text);
+}
+
+.markdownBody blockquote {
+  margin-inline: 0;
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-text-muted);
+  border-left: 3px solid var(--color-accent-border);
+}
+
+.markdownBody code,
+.htmlView code {
+  font-family: var(--font-mono);
+}
+
+.markdownBody :not(pre) > code {
+  padding: 0.15em 0.35em;
+  color: var(--color-warning-text);
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-sm);
+}
+
+.markdownBody pre,
+.htmlView pre {
+  padding: var(--space-4);
+  overflow: auto;
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.markdownBody table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.markdownBody th,
+.markdownBody td {
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  border: 1px solid var(--color-border-strong);
+}
+
+.markdownBody th {
+  color: var(--color-text-primary);
+  background: var(--color-bg-elevated);
+}
+
+.markdownBody img {
+  max-width: 100%;
+}
+
+.markdownBody li + li {
+  margin-top: var(--space-1);
+}
+
+.htmlView {
+  position: relative;
+}
+
+.htmlView > button {
+  float: right;
+  margin-bottom: var(--space-3);
+}
+
+.htmlView pre {
+  clear: both;
+  white-space: pre-wrap;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgb(0 0 0 / 68%);
+}
+
+.modal {
+  width: min(440px, 100%);
+  padding: var(--space-6);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-overlay);
+}
+
+.modal h2 {
+  margin: 0;
+}
+
+.modal p {
+  color: var(--color-text-secondary);
+}
+
+.modal > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.modal .confirmDanger {
+  color: #ffd7d7;
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+@media (max-width: 920px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .splitPane {
+    grid-template-columns: 1fr;
+  }
+
+  .editorPane {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .editorPane textarea,
+  .markdownBody,
+  .htmlView {
+    min-height: 440px;
+  }
+}
+
+@media (max-width: 560px) {
+  .paneHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .markdownBody,
+  .htmlView,
+  .editorPane textarea {
+    padding: var(--space-4);
+  }
+}
