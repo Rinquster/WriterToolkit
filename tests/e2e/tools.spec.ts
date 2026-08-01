@@ -34,6 +34,7 @@ test('renders and restores a sanitized Markdown draft with correct lists', async
 });
 
 test('compares two drafts and restores both inputs', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
   await page.goto('diff');
   const before = page.locator('#diff-before');
   const after = page.locator('#diff-after');
@@ -48,6 +49,14 @@ test('compares two drafts and restores both inputs', async ({ page }) => {
   await page.reload();
   await expect(before).toHaveValue('Он  пришёл.\nВечер был тихим.');
   await expect(after).toHaveValue('Он ушёл.\nВечер был очень тихим.');
+
+  const main = await page.locator('#main-content').boundingBox();
+  const workspace = await page.getByTestId('diff-workspace').boundingBox();
+  expect(main).not.toBeNull();
+  expect(workspace).not.toBeNull();
+  if (main && workspace) {
+    expect(workspace.width / main.width).toBeGreaterThan(0.99);
+  }
 });
 
 test('escapes source markup in Text to HTML and keeps the local draft', async ({

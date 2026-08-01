@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DragDropProvider } from '@dnd-kit/react';
 import { isSortable } from '@dnd-kit/react/sortable';
 import { Link, useNavigate, useParams } from 'react-router';
@@ -73,7 +73,10 @@ function LoadedSceneEditor({ document, editor }: LoadedSceneEditorProps) {
   const [fontSize, setFontSize] = useState(readFontSize);
   const [query, setQuery] = useState('');
   const [currentResult, setCurrentResult] = useState(-1);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [announcement, setAnnouncement] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchToggleRef = useRef<HTMLButtonElement>(null);
   const searchResults = useMemo(
     () => searchDocument(document, query),
     [document, query],
@@ -82,6 +85,12 @@ function LoadedSceneEditor({ document, editor }: LoadedSceneEditorProps) {
   useEffect(() => {
     localStorage.setItem('scene-editor-font-size-v2', String(fontSize));
   }, [fontSize]);
+
+  useEffect(() => {
+    if (isSearchOpen) {
+      searchInputRef.current?.focus();
+    }
+  }, [isSearchOpen]);
 
   const moveToSearchResult = (direction: 1 | -1) => {
     if (searchResults.length === 0) return;
@@ -183,6 +192,17 @@ function LoadedSceneEditor({ document, editor }: LoadedSceneEditorProps) {
           <button type="button" disabled={!editor.canRedo} onClick={editor.redo}>
             ↷ Вернуть
           </button>
+          <button
+            ref={searchToggleRef}
+            className={isSearchOpen ? styles.toggleActive : undefined}
+            type="button"
+            aria-label={isSearchOpen ? 'Закрыть поиск' : 'Открыть поиск'}
+            aria-expanded={isSearchOpen}
+            aria-controls="scene-search"
+            onClick={() => setIsSearchOpen((value) => !value)}
+          >
+            {isSearchOpen ? '× Поиск' : '⌕ Поиск'}
+          </button>
           <button type="button" onClick={handleExport}>
             Экспорт JSON
           </button>
@@ -209,41 +229,50 @@ function LoadedSceneEditor({ document, editor }: LoadedSceneEditorProps) {
         </div>
       </header>
 
-      <div className={styles.searchBar} role="search">
-        <label>
-          <span className={styles.visuallyHidden}>Поиск по всем вариантам</span>
-          <input
-            type="search"
-            value={query}
-            placeholder="Поиск по всем вариантам…"
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setCurrentResult(-1);
-            }}
-          />
-        </label>
-        <span className={styles.resultCount} aria-live="polite">
-          {query
-            ? `${searchResults.length} совпадений`
-            : `${document.scenes.length} сцен`}
-        </span>
-        <button
-          type="button"
-          disabled={searchResults.length === 0}
-          aria-label="Предыдущее совпадение"
-          onClick={() => moveToSearchResult(-1)}
-        >
-          ↑
-        </button>
-        <button
-          type="button"
-          disabled={searchResults.length === 0}
-          aria-label="Следующее совпадение"
-          onClick={() => moveToSearchResult(1)}
-        >
-          ↓
-        </button>
-      </div>
+      {isSearchOpen && (
+        <div id="scene-search" className={styles.searchBar} role="search">
+          <label>
+            <span className={styles.visuallyHidden}>Поиск по всем вариантам</span>
+            <input
+              ref={searchInputRef}
+              type="search"
+              value={query}
+              placeholder="Поиск по всем вариантам…"
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setCurrentResult(-1);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  setIsSearchOpen(false);
+                  window.requestAnimationFrame(() => searchToggleRef.current?.focus());
+                }
+              }}
+            />
+          </label>
+          <span className={styles.resultCount} aria-live="polite">
+            {query
+              ? `${searchResults.length} совпадений`
+              : `${document.scenes.length} сцен`}
+          </span>
+          <button
+            type="button"
+            disabled={searchResults.length === 0}
+            aria-label="Предыдущее совпадение"
+            onClick={() => moveToSearchResult(-1)}
+          >
+            ↑
+          </button>
+          <button
+            type="button"
+            disabled={searchResults.length === 0}
+            aria-label="Следующее совпадение"
+            onClick={() => moveToSearchResult(1)}
+          >
+            ↓
+          </button>
+        </div>
+      )}
 
       {(editor.error || editor.commandError) && (
         <div className={styles.errorBanner} role="alert">
@@ -256,7 +285,7 @@ function LoadedSceneEditor({ document, editor }: LoadedSceneEditorProps) {
         </div>
       )}
 
-      <main className={styles.sceneArea}>
+      <section className={styles.sceneArea} aria-label="Сцены документа">
         <DragDropProvider
           onDragStart={(event) => {
             const source = event.operation.source;
@@ -274,7 +303,7 @@ function LoadedSceneEditor({ document, editor }: LoadedSceneEditorProps) {
             }
           }}
         >
-          <div className={styles.sceneList}>
+          <div className={styles.sceneList} data-testid="scene-list">
             {document.scenes.map((scene, index) => (
               <SceneCard
                 key={scene.id}
@@ -311,7 +340,7 @@ function LoadedSceneEditor({ document, editor }: LoadedSceneEditorProps) {
             ))}
           </div>
         </DragDropProvider>
-      </main>
+      </section>
 
       <div className={styles.visuallyHidden} aria-live="assertive" aria-atomic="true">
         {announcement}
