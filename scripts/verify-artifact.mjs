@@ -1,12 +1,11 @@
 import { access, readdir } from 'node:fs/promises';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const distPath = fileURLToPath(new URL('../dist/', import.meta.url));
 const requiredFiles = ['index.html', '404.html', '.nojekyll', 'fonts/LICENSE.txt'];
 
-await Promise.all(
-  requiredFiles.map((fileName) => access(new URL(fileName, `file://${distPath}/`))),
-);
+await Promise.all(requiredFiles.map((fileName) => access(join(distPath, fileName))));
 
 const entries = await readdir(distPath, { recursive: true });
 const forbiddenFragments = ['old_frozen', 'fixtures/private', 'chapter19', 'schoons'];
