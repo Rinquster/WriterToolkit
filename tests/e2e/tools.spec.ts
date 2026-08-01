@@ -31,6 +31,14 @@ test('renders and restores a sanitized Markdown draft with correct lists', async
   await page.waitForTimeout(650);
   await page.reload();
   await expect(source).toHaveValue(/1\. Первый/);
+
+  const paneHeaderHeights = await page
+    .getByTestId('pane-header')
+    .evaluateAll((headers) =>
+      headers.map((header) => header.getBoundingClientRect().height),
+    );
+  expect(paneHeaderHeights).toHaveLength(2);
+  expect(paneHeaderHeights[0]).toBe(paneHeaderHeights[1]);
 });
 
 test('compares two drafts and restores both inputs', async ({ page }) => {
@@ -72,6 +80,14 @@ test('escapes source markup in Text to HTML and keeps the local draft', async ({
   await page.getByRole('tab', { name: 'Превью' }).click();
   await expect(page.locator('#html-result-title em')).toHaveText('«акцентом»');
   await expect(page.locator('#html-result-title script')).toHaveCount(0);
+
+  const paneHeaderHeights = await page
+    .getByTestId('pane-header')
+    .evaluateAll((headers) =>
+      headers.map((header) => header.getBoundingClientRect().height),
+    );
+  expect(paneHeaderHeights).toHaveLength(2);
+  expect(paneHeaderHeights[0]).toBe(paneHeaderHeights[1]);
 
   await page.waitForTimeout(650);
   await page.reload();

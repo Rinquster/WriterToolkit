@@ -60,3 +60,18 @@ test('opens the navigation drawer without reserving desktop main width', async (
     page.getByRole('navigation', { name: 'Основная навигация' }),
   ).toHaveCount(0);
 });
+
+test('replaces contextual header content when navigating between tools', async ({
+  page,
+}) => {
+  await page.goto('html');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Text → HTML');
+  await expect(page.getByRole('button', { name: 'Копировать HTML' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Открыть меню' }).click();
+  await page.getByRole('link', { name: 'Markdown' }).click();
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Markdown');
+  await expect(page.getByRole('button', { name: 'Копировать MD' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Копировать HTML' })).toHaveCount(0);
+});

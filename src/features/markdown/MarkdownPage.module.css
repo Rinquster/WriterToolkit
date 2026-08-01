@@ -22,7 +22,8 @@
   gap: var(--space-1);
 }
 
-.topbar button,
+.formatting button,
+.fileActions button,
 .previewTabs button,
 .htmlView > button,
 .notice button,
@@ -36,7 +37,8 @@
   cursor: pointer;
 }
 
-.topbar button:hover,
+.formatting button:hover,
+.fileActions button:hover,
 .previewTabs button:hover,
 .htmlView > button:hover,
 .modal button:hover {
@@ -45,7 +47,7 @@
   border-color: var(--color-border-strong);
 }
 
-.topbar .dangerButton {
+.fileActions .dangerButton {
   color: var(--color-warning-text);
   background: transparent;
   border-color: transparent;
@@ -103,7 +105,7 @@
 }
 
 .paneHeader {
-  min-height: 52px;
+  height: 53px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -320,6 +322,8 @@
 
 @media (max-width: 560px) {
   .paneHeader {
+    height: auto;
+    min-height: 52px;
     align-items: flex-start;
     flex-direction: column;
   }

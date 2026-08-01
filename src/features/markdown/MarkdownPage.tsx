@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import PageHeader from '../../design-system/components/PageHeader';
+import AppHeaderContent from '../../design-system/components/AppHeaderContent';
 import StatusBadge from '../../design-system/components/StatusBadge';
 import { downloadTextFile } from '../../infrastructure/files/download';
 import { useDocumentTitle } from '../../shared/hooks/useDocumentTitle';
@@ -78,11 +78,38 @@ export default function MarkdownPage() {
 
   return (
     <>
-      <PageHeader
-        eyebrow="Разметка"
+      <AppHeaderContent
         title="Markdown"
-        description="GFM-превью со списками, таблицами и безопасной обработкой встроенного HTML."
         status={<StatusBadge tone="success">Автосохранение</StatusBadge>}
+        actions={
+          <div className={styles.fileActions}>
+            <button
+              type="button"
+              onClick={() => void copy(draft.value.markdown, 'Markdown')}
+            >
+              Копировать MD
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                downloadTextFile(
+                  draft.value.markdown,
+                  'document.md',
+                  'text/markdown;charset=utf-8',
+                )
+              }
+            >
+              Скачать .md
+            </button>
+            <button
+              className={styles.dangerButton}
+              type="button"
+              onClick={() => setConfirmClear(true)}
+            >
+              Очистить
+            </button>
+          </div>
+        }
       />
 
       <div className={styles.workspace}>
@@ -118,33 +145,6 @@ export default function MarkdownPage() {
               Ссылка
             </button>
           </div>
-          <div className={styles.fileActions}>
-            <button
-              type="button"
-              onClick={() => void copy(draft.value.markdown, 'Markdown')}
-            >
-              Копировать MD
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                downloadTextFile(
-                  draft.value.markdown,
-                  'document.md',
-                  'text/markdown;charset=utf-8',
-                )
-              }
-            >
-              Скачать .md
-            </button>
-            <button
-              className={styles.dangerButton}
-              type="button"
-              onClick={() => setConfirmClear(true)}
-            >
-              Очистить
-            </button>
-          </div>
         </div>
 
         {notice && (
@@ -173,7 +173,7 @@ export default function MarkdownPage() {
             className={styles.editorPane}
             aria-labelledby="markdown-source-title"
           >
-            <div className={styles.paneHeader}>
+            <div className={styles.paneHeader} data-testid="pane-header">
               <h2 id="markdown-source-title">Исходник</h2>
               <span>{draft.value.markdown.length.toLocaleString('ru-RU')} знаков</span>
             </div>
@@ -192,7 +192,7 @@ export default function MarkdownPage() {
             className={styles.previewPane}
             aria-labelledby="markdown-preview-title"
           >
-            <div className={styles.paneHeader}>
+            <div className={styles.paneHeader} data-testid="pane-header">
               <div
                 className={styles.previewTabs}
                 role="tablist"

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
+import { AppHeaderTargetProvider } from './AppHeaderPortal';
 import styles from './AppShell.module.css';
 
 const navigation = [
@@ -16,10 +17,12 @@ export default function AppShell() {
   const isMenuOpen = openMenuPath === location.pathname;
   const mainRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const [headerTarget, setHeaderTarget] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
     mainRef.current?.focus();
-  }, [location.pathname]);
+    headerTarget?.scrollTo({ left: 0 });
+  }, [headerTarget, location.pathname]);
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -64,17 +67,10 @@ export default function AppShell() {
         >
           <span aria-hidden="true">{isMenuOpen ? '×' : '☰'}</span>
         </button>
-        <NavLink
-          className={styles.appBrand}
-          to="/scenes"
-          aria-label="WriterToolkit — документы сцен"
-          onClick={() => setOpenMenuPath(undefined)}
-        >
-          <span className={styles.appBrandMark} aria-hidden="true">
-            W
-          </span>
-          <span>WriterToolkit</span>
-        </NavLink>
+        <div
+          ref={setHeaderTarget}
+          className={`${styles.headerContext} ${isMenuOpen ? styles.headerContextHidden : ''}`}
+        />
       </header>
 
       <aside
@@ -131,9 +127,11 @@ export default function AppShell() {
         />
       )}
 
-      <main ref={mainRef} id="main-content" className={styles.main} tabIndex={-1}>
-        <Outlet />
-      </main>
+      <AppHeaderTargetProvider target={headerTarget}>
+        <main ref={mainRef} id="main-content" className={styles.main} tabIndex={-1}>
+          <Outlet />
+        </main>
+      </AppHeaderTargetProvider>
     </div>
   );
 }

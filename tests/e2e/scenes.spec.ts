@@ -192,7 +192,7 @@ test('archives a deleted document and restores it from recovery', async ({ page 
     .getByLabel('Текст активного варианта сцены 1')
     .fill('Текст не должен потеряться');
   await expect(page.getByText('Сохранено', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: '← Документы' }).click();
+  await page.getByRole('button', { name: 'Вернуться к документам' }).click();
 
   await page
     .getByRole('button', { name: 'Удалить документ «Восстанавливаемый черновик»' })

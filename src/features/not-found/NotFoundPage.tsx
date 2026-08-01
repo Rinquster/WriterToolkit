@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import PageHeader from '../../design-system/components/PageHeader';
+import AppHeaderContent from '../../design-system/components/AppHeaderContent';
 import { useDocumentTitle } from '../../shared/hooks/useDocumentTitle';
 import styles from './NotFoundPage.module.css';
 
@@ -8,10 +8,7 @@ export default function NotFoundPage() {
 
   return (
     <>
-      <PageHeader
-        title="Страница не найдена"
-        description="Такого инструмента или документа в WriterToolkit нет."
-      />
+      <AppHeaderContent title="Страница не найдена" />
       <div className={styles.content}>
         <p>Проверьте адрес или вернитесь к документам сцен.</p>
         <Link className={styles.link} to="/scenes">

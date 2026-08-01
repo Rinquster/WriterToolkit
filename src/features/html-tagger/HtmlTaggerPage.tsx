@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import PageHeader from '../../design-system/components/PageHeader';
+import AppHeaderContent from '../../design-system/components/AppHeaderContent';
 import StatusBadge from '../../design-system/components/StatusBadge';
 import { downloadTextFile } from '../../infrastructure/files/download';
 import { useDocumentTitle } from '../../shared/hooks/useDocumentTitle';
@@ -59,11 +59,43 @@ export default function HtmlTaggerPage() {
 
   return (
     <>
-      <PageHeader
-        eyebrow="Публикация"
+      <AppHeaderContent
         title="Text → HTML"
-        description="Безопасно превращает строки или абзацы в чистую HTML-разметку."
         status={<StatusBadge tone="success">Автосохранение</StatusBadge>}
+        actions={
+          <div className={styles.actions}>
+            <button
+              type="button"
+              disabled={!fragment}
+              onClick={() => void copyResult()}
+            >
+              Копировать HTML
+            </button>
+            <button
+              type="button"
+              disabled={!fragment}
+              onClick={() =>
+                downloadTextFile(
+                  completeHtmlDocument(fragment),
+                  'document.html',
+                  'text/html;charset=utf-8',
+                )
+              }
+            >
+              Скачать .html
+            </button>
+            <button type="button" disabled={!fragment} onClick={openPreview}>
+              Открыть отдельно
+            </button>
+            <button
+              className={styles.dangerButton}
+              type="button"
+              onClick={() => void draft.clear()}
+            >
+              Очистить
+            </button>
+          </div>
+        }
       />
 
       <div className={styles.workspace}>
@@ -98,38 +130,6 @@ export default function HtmlTaggerPage() {
             />
             Сохранять пустые строки
           </label>
-          <div className={styles.actions}>
-            <button
-              type="button"
-              disabled={!fragment}
-              onClick={() => void copyResult()}
-            >
-              Копировать HTML
-            </button>
-            <button
-              type="button"
-              disabled={!fragment}
-              onClick={() =>
-                downloadTextFile(
-                  completeHtmlDocument(fragment),
-                  'document.html',
-                  'text/html;charset=utf-8',
-                )
-              }
-            >
-              Скачать .html
-            </button>
-            <button type="button" disabled={!fragment} onClick={openPreview}>
-              Открыть отдельно
-            </button>
-            <button
-              className={styles.dangerButton}
-              type="button"
-              onClick={() => void draft.clear()}
-            >
-              Очистить
-            </button>
-          </div>
         </div>
 
         {notice && (
@@ -155,7 +155,7 @@ export default function HtmlTaggerPage() {
 
         <div className={styles.splitPane}>
           <label className={styles.sourcePane} htmlFor="html-source">
-            <span className={styles.paneHeader}>
+            <span className={styles.paneHeader} data-testid="pane-header">
               <strong>Исходный текст</strong>
               <small>{draft.value.source.length.toLocaleString('ru-RU')} знаков</small>
             </span>
@@ -171,7 +171,7 @@ export default function HtmlTaggerPage() {
           </label>
 
           <section className={styles.resultPane} aria-labelledby="html-result-title">
-            <div className={styles.paneHeader}>
+            <div className={styles.paneHeader} data-testid="pane-header">
               <div
                 className={styles.tabs}
                 role="tablist"

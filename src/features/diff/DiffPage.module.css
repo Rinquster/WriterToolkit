@@ -63,7 +63,6 @@
 
 .toolbarActions {
   gap: var(--space-1);
-  margin-left: auto;
 }
 
 .toolbarActions .dangerButton {
