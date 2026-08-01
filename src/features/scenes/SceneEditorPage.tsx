@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { DragDropProvider } from '@dnd-kit/react';
 import { isSortable } from '@dnd-kit/react/sortable';
 import { Link, useNavigate, useParams } from 'react-router';
+import { AppHeaderPortal } from '../../app/AppHeaderPortal';
 import StatusBadge from '../../design-system/components/StatusBadge';
 import { downloadTextFile, safeFilename } from '../../infrastructure/files/download';
 import { useDocumentTitle } from '../../shared/hooks/useDocumentTitle';
@@ -152,82 +153,90 @@ function LoadedSceneEditor({ document, editor }: LoadedSceneEditorProps) {
 
   return (
     <div className={styles.editor}>
-      <header className={styles.editorHeader}>
-        <div className={styles.headerMain}>
-          <button
-            className={styles.backLink}
-            type="button"
-            onClick={() => {
-              void editor.flush().then(() => navigate('/scenes'));
-            }}
-          >
-            ← Документы
-          </button>
-          <label className={styles.documentName}>
-            <span className={styles.visuallyHidden}>Название документа</span>
-            <input
-              value={document.name}
-              placeholder="Без названия"
-              onChange={(event) =>
-                editor.apply(renameDocument(document, event.target.value), {
-                  historyGroup: 'document-name',
-                })
-              }
-            />
-          </label>
-          <SaveBadge state={editor.saveState} />
-        </div>
+      <AppHeaderPortal>
+        <div className={styles.headerContent}>
+          <div className={styles.headerMain}>
+            <button
+              className={styles.backLink}
+              type="button"
+              aria-label="Вернуться к документам"
+              onClick={() => {
+                void editor.flush().then(() => navigate('/scenes'));
+              }}
+            >
+              <span className={styles.backArrow} aria-hidden="true">
+                ←
+              </span>
+              <span className={styles.backText}>Документы</span>
+            </button>
+            <label className={styles.documentName}>
+              <span className={styles.visuallyHidden}>Название документа</span>
+              <input
+                value={document.name}
+                placeholder="Без названия"
+                onChange={(event) =>
+                  editor.apply(renameDocument(document, event.target.value), {
+                    historyGroup: 'document-name',
+                  })
+                }
+              />
+            </label>
+            <span className={styles.saveStatus}>
+              <SaveBadge state={editor.saveState} />
+            </span>
+          </div>
 
-        <div className={styles.toolbar} aria-label="Инструменты документа">
-          <button
-            className={styles.primaryButton}
-            type="button"
-            onClick={() => editor.apply(addScene(document), { immediate: true })}
-          >
-            + Сцена
-          </button>
-          <button type="button" disabled={!editor.canUndo} onClick={editor.undo}>
-            ↶ Отменить
-          </button>
-          <button type="button" disabled={!editor.canRedo} onClick={editor.redo}>
-            ↷ Вернуть
-          </button>
-          <button
-            ref={searchToggleRef}
-            className={isSearchOpen ? styles.toggleActive : undefined}
-            type="button"
-            aria-label={isSearchOpen ? 'Закрыть поиск' : 'Открыть поиск'}
-            aria-expanded={isSearchOpen}
-            aria-controls="scene-search"
-            onClick={() => setIsSearchOpen((value) => !value)}
-          >
-            {isSearchOpen ? '× Поиск' : '⌕ Поиск'}
-          </button>
-          <button type="button" onClick={handleExport}>
-            Экспорт JSON
-          </button>
-          <div className={styles.fontControl}>
-            <span>Шрифт</span>
+          <div className={styles.toolbar} aria-label="Инструменты документа">
             <button
+              className={styles.primaryButton}
               type="button"
-              disabled={fontSize <= 10}
-              aria-label="Уменьшить шрифт редактора"
-              onClick={() => setFontSize((value) => Math.max(10, value - 1))}
+              onClick={() => editor.apply(addScene(document), { immediate: true })}
             >
-              −
+              + Сцена
             </button>
-            <output>{fontSize}</output>
             <button
+              ref={searchToggleRef}
+              className={isSearchOpen ? styles.toggleActive : undefined}
               type="button"
-              disabled={fontSize >= 32}
-              aria-label="Увеличить шрифт редактора"
-              onClick={() => setFontSize((value) => Math.min(32, value + 1))}
+              aria-label={isSearchOpen ? 'Закрыть поиск' : 'Открыть поиск'}
+              aria-expanded={isSearchOpen}
+              aria-controls="scene-search"
+              onClick={() => setIsSearchOpen((value) => !value)}
             >
-              +
+              {isSearchOpen ? '× Поиск' : '⌕ Поиск'}
             </button>
+            <button type="button" disabled={!editor.canUndo} onClick={editor.undo}>
+              ↶ Отменить
+            </button>
+            <button type="button" disabled={!editor.canRedo} onClick={editor.redo}>
+              ↷ Вернуть
+            </button>
+            <button type="button" onClick={handleExport}>
+              Экспорт JSON
+            </button>
+            <div className={styles.fontControl}>
+              <span>Шрифт</span>
+              <button
+                type="button"
+                disabled={fontSize <= 10}
+                aria-label="Уменьшить шрифт редактора"
+                onClick={() => setFontSize((value) => Math.max(10, value - 1))}
+              >
+                −
+              </button>
+              <output>{fontSize}</output>
+              <button
+                type="button"
+                disabled={fontSize >= 32}
+                aria-label="Увеличить шрифт редактора"
+                onClick={() => setFontSize((value) => Math.min(32, value + 1))}
+              >
+                +
+              </button>
+            </div>
           </div>
         </div>
-      </header>
+      </AppHeaderPortal>
 
       {isSearchOpen && (
         <div id="scene-search" className={styles.searchBar} role="search">

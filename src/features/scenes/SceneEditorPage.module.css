@@ -2,18 +2,13 @@
   min-height: calc(100vh - var(--app-header-height));
 }
 
-.editorHeader {
-  position: sticky;
-  top: var(--app-header-height);
-  z-index: 12;
+.headerContent {
+  width: 100%;
+  min-width: max-content;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  padding: var(--space-3) var(--page-padding);
-  background: color-mix(in srgb, var(--color-bg-canvas) 94%, transparent);
-  border-bottom: 1px solid var(--color-border);
-  backdrop-filter: blur(14px);
 }
 
 .headerMain,
@@ -27,12 +22,15 @@
 
 .headerMain {
   min-width: 0;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   gap: var(--space-3);
 }
 
 .backLink {
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   padding: 0;
   color: var(--color-text-muted);
   font-size: 13px;
@@ -42,12 +40,16 @@
   cursor: pointer;
 }
 
+.backArrow {
+  font-size: 16px;
+}
+
 .backLink:hover {
   color: var(--color-text-primary);
 }
 
 .documentName {
-  width: min(440px, 46vw);
+  width: min(320px, 30vw);
 }
 
 .documentName input {
@@ -70,7 +72,7 @@
 
 .toolbar {
   flex: 0 0 auto;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--space-2);
 }
 
@@ -229,26 +231,24 @@
   white-space: nowrap;
 }
 
-@media (max-width: 1200px) {
-  .editorHeader {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .documentName {
-    width: min(520px, 100%);
-  }
-}
-
 @media (max-width: 660px) {
-  .headerMain {
-    align-items: flex-start;
-    flex-wrap: wrap;
+  .documentName {
+    width: 128px;
   }
 
-  .documentName {
-    width: 100%;
-    order: 3;
+  .documentName input {
+    padding-inline: var(--space-2);
+    font-size: 16px;
+  }
+
+  .backText,
+  .saveStatus {
+    display: none;
+  }
+
+  .toolbar > button {
+    min-height: 36px;
+    padding-inline: var(--space-2);
   }
 
   .searchBar {

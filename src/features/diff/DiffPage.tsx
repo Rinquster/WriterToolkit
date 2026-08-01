@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { Change } from 'diff';
-import PageHeader from '../../design-system/components/PageHeader';
+import AppHeaderContent from '../../design-system/components/AppHeaderContent';
 import StatusBadge from '../../design-system/components/StatusBadge';
 import { useDocumentTitle } from '../../shared/hooks/useDocumentTitle';
 import { useLocalDraft } from '../../shared/hooks/useLocalDraft';
@@ -36,11 +36,28 @@ export default function DiffPage() {
 
   return (
     <>
-      <PageHeader
-        eyebrow="Редактура"
+      <AppHeaderContent
         title="Сравнение текстов"
-        description="Пословное или построчное сравнение с сохранением пробелов и переносов."
         status={<StatusBadge tone="success">Автосохранение</StatusBadge>}
+        actions={
+          <div className={styles.toolbarActions}>
+            <button
+              type="button"
+              onClick={() =>
+                update({ before: draft.value.after, after: draft.value.before })
+              }
+            >
+              ⇄ Поменять местами
+            </button>
+            <button
+              className={styles.dangerButton}
+              type="button"
+              onClick={() => void draft.clear()}
+            >
+              Очистить оба
+            </button>
+          </div>
+        }
       />
 
       <div className={styles.workspace} data-testid="diff-workspace">
@@ -69,23 +86,6 @@ export default function DiffPage() {
             />
             Игнорировать регистр
           </label>
-          <div className={styles.toolbarActions}>
-            <button
-              type="button"
-              onClick={() =>
-                update({ before: draft.value.after, after: draft.value.before })
-              }
-            >
-              ⇄ Поменять местами
-            </button>
-            <button
-              className={styles.dangerButton}
-              type="button"
-              onClick={() => void draft.clear()}
-            >
-              Очистить оба
-            </button>
-          </div>
         </div>
 
         {(draft.error || !draft.ready) && (

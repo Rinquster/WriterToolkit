@@ -1,4 +1,4 @@
-import PageHeader from '../../design-system/components/PageHeader';
+import AppHeaderContent from '../../design-system/components/AppHeaderContent';
 import StatusBadge from '../../design-system/components/StatusBadge';
 import { useDocumentTitle } from '../../shared/hooks/useDocumentTitle';
 import styles from './AboutPage.module.css';
@@ -8,9 +8,8 @@ export default function AboutPage() {
 
   return (
     <>
-      <PageHeader
+      <AppHeaderContent
         title="О WriterToolkit"
-        description="Локальные инструменты для писательской и редакторской работы."
         status={<StatusBadge tone="success">Новая основа</StatusBadge>}
       />
       <div className={styles.grid}>

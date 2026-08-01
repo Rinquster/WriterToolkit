@@ -1,6 +1,6 @@
 import { useRef, useState, type ChangeEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
-import PageHeader from '../../design-system/components/PageHeader';
+import AppHeaderContent from '../../design-system/components/AppHeaderContent';
 import StatusBadge from '../../design-system/components/StatusBadge';
 import { useDocumentTitle } from '../../shared/hooks/useDocumentTitle';
 import { useSceneLibrary } from './application';
@@ -96,23 +96,10 @@ export default function ScenesPage() {
 
   return (
     <>
-      <PageHeader
-        eyebrow="Главный инструмент"
+      <AppHeaderContent
         title="Документы сцен"
-        description="Сцены, альтернативные варианты текста и надёжное локальное сохранение."
         status={<StatusBadge tone="success">Локально</StatusBadge>}
-      />
-
-      <div className={styles.content}>
-        <section className={styles.actions} aria-labelledby="start-title">
-          <div>
-            <p className={styles.kicker}>Начать работу</p>
-            <h2 id="start-title">Новый текст или старый проект</h2>
-            <p>
-              Импорт принимает JSON прежнего WriterToolkit и сначала проверяет его
-              целиком — до записи в браузер.
-            </p>
-          </div>
+        actions={
           <div className={styles.actionButtons}>
             <button
               className={styles.primaryButton}
@@ -138,8 +125,10 @@ export default function ScenesPage() {
               onChange={(event) => void handleFile(event)}
             />
           </div>
-        </section>
+        }
+      />
 
+      <div className={styles.content}>
         {importDiagnostics.length > 0 && (
           <section
             className={styles.errorPanel}
