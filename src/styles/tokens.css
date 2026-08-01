@@ -1,0 +1,59 @@
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-roman.var.woff2') format('woff2');
+}
+
+:root {
+  color-scheme: dark;
+
+  --color-bg-canvas: #07090f;
+  --color-bg-surface: #10151f;
+  --color-bg-elevated: #19212f;
+  --color-bg-hover: #222c3e;
+  --color-border: #282c42;
+  --color-border-strong: #3b4562;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #ccd6e0;
+  --color-text-muted: #91a0b2;
+  --color-accent: #2878dc;
+  --color-accent-hover: #1e5faf;
+  --color-accent-text: #8fc4ff;
+  --color-accent-border: #397bc5;
+  --color-accent-subtle: #122b4b;
+  --color-success: #1e783c;
+  --color-success-text: #8ee2a6;
+  --color-success-border: #327c4b;
+  --color-success-subtle: #112f1d;
+  --color-warning: #c4872e;
+  --color-warning-text: #f3c77e;
+  --color-warning-border: #8f652c;
+  --color-warning-subtle: #352611;
+  --color-danger: #be3232;
+  --color-critical: #78141e;
+
+  --font-ui: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --sidebar-width: 232px;
+  --mobile-header-height: 61px;
+  --page-padding: clamp(16px, 3vw, 36px);
+  --shadow-overlay: 0 24px 70px rgb(0 0 0 / 45%);
+}

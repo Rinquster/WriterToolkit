@@ -1,0 +1,282 @@
+.editor {
+  min-height: 100vh;
+}
+
+.editorHeader {
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--page-padding);
+  background: color-mix(in srgb, var(--color-bg-canvas) 94%, transparent);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(14px);
+}
+
+.headerMain,
+.toolbar,
+.fontControl,
+.searchBar,
+.errorBanner {
+  display: flex;
+  align-items: center;
+}
+
+.headerMain {
+  min-width: 0;
+  flex: 1 1 auto;
+  gap: var(--space-3);
+}
+
+.backLink {
+  flex: 0 0 auto;
+  padding: 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  background: transparent;
+  border: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.backLink:hover {
+  color: var(--color-text-primary);
+}
+
+.documentName {
+  width: min(440px, 46vw);
+}
+
+.documentName input {
+  width: 100%;
+  height: 42px;
+  padding: 0 var(--space-3);
+  color: var(--color-text-primary);
+  font-size: 18px;
+  font-weight: 750;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+}
+
+.documentName input:hover,
+.documentName input:focus {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-border-strong);
+}
+
+.toolbar {
+  flex: 0 0 auto;
+  gap: var(--space-2);
+}
+
+.toolbar > button,
+.searchBar button,
+.errorBanner button {
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  color: var(--color-text-secondary);
+  font-weight: 650;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+}
+
+.toolbar > button:hover:not(:disabled),
+.searchBar button:hover:not(:disabled),
+.errorBanner button:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+}
+
+.toolbar .primaryButton {
+  color: var(--color-text-primary);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.fontControl {
+  height: 40px;
+  gap: var(--space-1);
+  padding-left: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  border-left: 1px solid var(--color-border);
+}
+
+.fontControl button {
+  width: 32px;
+  height: 32px;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.fontControl button:hover:not(:disabled) {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+}
+
+.fontControl button:disabled,
+.searchBar button:disabled {
+  cursor: not-allowed;
+  opacity: 0.34;
+}
+
+.fontControl output {
+  width: 24px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.searchBar {
+  position: sticky;
+  top: 67px;
+  z-index: 10;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--page-padding);
+  background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.searchBar label {
+  width: min(620px, 100%);
+}
+
+.searchBar input {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--space-4);
+  color: var(--color-text-primary);
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.searchBar input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.resultCount {
+  min-width: 104px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.searchBar button {
+  min-width: 40px;
+  padding: 0;
+}
+
+.errorBanner {
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--page-padding);
+  color: var(--color-warning-text);
+  background: var(--color-warning-subtle);
+  border-bottom: 1px solid var(--color-warning-border);
+}
+
+.sceneArea {
+  padding: var(--space-6) var(--page-padding) var(--space-12);
+}
+
+.sceneList {
+  width: min(980px, 100%);
+  display: grid;
+  gap: var(--space-4);
+  margin: 0 auto;
+}
+
+.routeState {
+  min-height: min(620px, 100vh);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: var(--page-padding);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.routeState h1 {
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.routeState p {
+  margin: var(--space-2) 0 var(--space-4);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 1200px) {
+  .editorHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .documentName {
+    width: min(520px, 100%);
+  }
+
+  .searchBar {
+    top: 116px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .editorHeader {
+    top: var(--mobile-header-height);
+  }
+
+  .searchBar {
+    top: calc(var(--mobile-header-height) + 116px);
+  }
+}
+
+@media (max-width: 660px) {
+  .headerMain {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .documentName {
+    width: 100%;
+    order: 3;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .searchBar {
+    position: static;
+    flex-wrap: wrap;
+  }
+
+  .searchBar label {
+    width: 100%;
+  }
+
+  .resultCount {
+    margin-right: auto;
+    text-align: left;
+  }
+}

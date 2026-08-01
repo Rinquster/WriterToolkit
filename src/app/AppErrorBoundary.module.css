@@ -1,0 +1,56 @@
+.fallback {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      color-mix(in srgb, var(--color-accent) 16%, transparent),
+      transparent 45%
+    ),
+    var(--color-bg-canvas);
+}
+
+.fallback > div {
+  width: min(560px, 100%);
+  padding: var(--space-8);
+  text-align: center;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-overlay);
+}
+
+.fallback span {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto var(--space-5);
+  font-size: 22px;
+  font-weight: 800;
+  background: var(--color-accent);
+  border-radius: var(--radius-xl);
+}
+
+.fallback h1 {
+  margin: 0;
+  font-size: clamp(24px, 4vw, 32px);
+}
+
+.fallback p {
+  margin: var(--space-3) 0 var(--space-6);
+  color: var(--color-text-secondary);
+}
+
+.fallback button {
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  color: var(--color-text-primary);
+  font-weight: 700;
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+}

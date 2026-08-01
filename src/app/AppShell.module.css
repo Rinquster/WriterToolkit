@@ -1,0 +1,199 @@
+.appShell {
+  min-height: 100vh;
+}
+
+.skipLink {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 1000;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text-primary);
+  background: var(--color-accent);
+  border-radius: var(--radius-md);
+  transform: translateY(-160%);
+}
+
+.skipLink:focus {
+  transform: translateY(0);
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 30;
+  width: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+  background: var(--color-bg-surface);
+  border-right: 1px solid var(--color-border);
+}
+
+.brand {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  color: var(--color-text-primary);
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+}
+
+.brandMark {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--color-text-primary);
+  background: var(--color-accent);
+  border-radius: var(--radius-lg);
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-8);
+}
+
+.navLink {
+  position: relative;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.navLink:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+}
+
+.navLinkActive {
+  color: var(--color-text-primary);
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent-border);
+}
+
+.navLinkActive::before {
+  content: '';
+  position: absolute;
+  inset: 9px auto 9px -17px;
+  width: 3px;
+  background: var(--color-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.navIcon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-md);
+}
+
+.storageNote {
+  margin-top: auto;
+  padding: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+  border-top: 1px solid var(--color-border);
+}
+
+.main {
+  min-height: 100vh;
+  margin-left: var(--sidebar-width);
+  outline: none;
+}
+
+.mobileHeader,
+.backdrop {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .mobileHeader {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    min-height: var(--mobile-header-height);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    background: color-mix(in srgb, var(--color-bg-canvas) 92%, transparent);
+    border-bottom: 1px solid var(--color-border);
+    backdrop-filter: blur(12px);
+  }
+
+  .menuButton {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    color: var(--color-text-primary);
+    font-size: 22px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+  }
+
+  .mobileBrand {
+    font-weight: 700;
+  }
+
+  .sidebar {
+    z-index: 40;
+    width: min(84vw, var(--sidebar-width));
+    transform: translateX(-105%);
+    transition: transform 180ms ease;
+    box-shadow: var(--shadow-overlay);
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    display: block;
+    padding: 0;
+    background: rgb(0 0 0 / 62%);
+    border: 0;
+  }
+
+  .main {
+    min-height: calc(100vh - var(--mobile-header-height));
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navLink,
+  .sidebar {
+    transition: none;
+  }
+}
