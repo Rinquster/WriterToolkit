@@ -223,9 +223,7 @@ export default function ScenesPage() {
           ) : library.documents.length === 0 ? (
             <div className={styles.emptyState}>
               <h3>Пока пусто</h3>
-              <p>
-                Создайте первый документ или импортируйте JSON.
-              </p>
+              <p>Создайте первый документ или импортируйте JSON.</p>
             </div>
           ) : (
             <ul className={styles.documentGrid}>
