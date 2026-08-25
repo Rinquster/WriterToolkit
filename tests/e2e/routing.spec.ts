@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const routes = [
   { path: 'scenes', heading: 'Документы сцен' },
+  { path: 'audit', heading: 'Аудит текста' },
   { path: 'diff', heading: 'Сравнение текстов' },
   { path: 'markdown', heading: 'Markdown' },
   { path: 'html', heading: 'Text → HTML' },

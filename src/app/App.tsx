@@ -11,6 +11,7 @@ const MarkdownPage = lazy(() => import('../features/markdown/MarkdownPage'));
 const NotFoundPage = lazy(() => import('../features/not-found/NotFoundPage'));
 const SceneEditorPage = lazy(() => import('../features/scenes/SceneEditorPage'));
 const ScenesPage = lazy(() => import('../features/scenes/ScenesPage'));
+const TextAuditPage = lazy(() => import('../features/text-audit/TextAuditPage'));
 
 function RouteFallback() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
             <Route index element={<Navigate to="/scenes" replace />} />
             <Route path="scenes" element={<ScenesPage />} />
             <Route path="scenes/:documentId" element={<SceneEditorPage />} />
+            <Route path="audit" element={<TextAuditPage />} />
             <Route path="diff" element={<DiffPage />} />
             <Route path="markdown" element={<MarkdownPage />} />
             <Route path="html" element={<HtmlTaggerPage />} />

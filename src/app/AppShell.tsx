@@ -5,6 +5,7 @@ import styles from './AppShell.module.css';
 
 const navigation = [
   { to: '/scenes', label: 'Сцены', shortLabel: 'Сц' },
+  { to: '/audit', label: 'Аудит', shortLabel: 'Ау' },
   { to: '/diff', label: 'Сравнение', shortLabel: 'Δ' },
   { to: '/markdown', label: 'Markdown', shortLabel: 'Md' },
   { to: '/html', label: 'Text → HTML', shortLabel: '<>' },

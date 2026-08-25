@@ -93,3 +93,78 @@ test('escapes source markup in Text to HTML and keeps the local draft', async ({
   await page.reload();
   await expect(source).toHaveValue('<script>alert("x")</script>\nФраза с «акцентом».');
 });
+
+test('highlights writer artifacts, searches the text and keeps the audit draft', async ({
+  page,
+}) => {
+  await page.goto('audit');
+  const source = page.getByLabel('Текст для аудита');
+  // Во втором «кoшка» латинская o, между словами двойной пробел.
+  await source.fill('кошка и кoшка  ждали');
+
+  await expect(page.locator('[data-layer="mixedScript"]')).toHaveText('кoшка');
+  await expect(page.locator('[data-layer="extraSpace"]')).toHaveCount(1);
+
+  await page.getByRole('button', { name: /Латиница/ }).click();
+  await expect(page.locator('[data-layer="latin"]')).toHaveCount(0);
+  await page.getByRole('button', { name: /Смешанные буквы/ }).click();
+  await expect(page.locator('[data-layer="latin"]')).toHaveText('o');
+
+  await page.getByLabel('Поиск').fill('ждали');
+  await expect(page.locator('[data-layer="search"]')).toHaveText('ждали');
+  await expect(page.getByTestId('audit-match-count')).toHaveText('1 из 1');
+
+  await expect(source).toHaveJSProperty('spellcheck', false);
+  await page.getByLabel('Проверка орфографии').check();
+  await expect(source).toHaveJSProperty('spellcheck', true);
+
+  await page.waitForTimeout(650);
+  await page.reload();
+  await expect(source).toHaveValue('кошка и кoшка  ждали');
+  await expect(source).toHaveJSProperty('spellcheck', true);
+});
+
+test('keeps the highlight overlay aligned with the textarea it covers', async ({
+  page,
+}) => {
+  await page.goto('audit');
+  const source = page.getByLabel('Текст для аудита');
+  await source.fill(
+    Array.from(
+      { length: 40 },
+      (_, index) => `Строка ${index} ${'слово '.repeat(14)}`,
+    ).join('\n'),
+  );
+
+  const metrics = await page.evaluate(() => {
+    const textarea = document.querySelector('#audit-source');
+    const backdrop = document.querySelector('[data-testid="audit-backdrop"]');
+    if (
+      !(textarea instanceof HTMLTextAreaElement) ||
+      !(backdrop instanceof HTMLElement)
+    ) {
+      throw new Error('audit editor is not rendered');
+    }
+    textarea.scrollTop = 120;
+    textarea.dispatchEvent(new Event('scroll'));
+    return {
+      textareaHeight: textarea.scrollHeight,
+      backdropHeight: backdrop.scrollHeight,
+      textareaWidth: textarea.clientWidth,
+      backdropWidth: backdrop.clientWidth,
+    };
+  });
+
+  expect(metrics.backdropWidth).toBe(metrics.textareaWidth);
+  expect(Math.abs(metrics.backdropHeight - metrics.textareaHeight)).toBeLessThanOrEqual(
+    1,
+  );
+  await expect
+    .poll(async () =>
+      page.evaluate(() => {
+        const backdrop = document.querySelector('[data-testid="audit-backdrop"]');
+        return backdrop instanceof HTMLElement ? backdrop.scrollTop : -1;
+      }),
+    )
+    .toBe(120);
+});

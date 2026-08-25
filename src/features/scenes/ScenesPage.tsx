@@ -224,7 +224,7 @@ export default function ScenesPage() {
             <div className={styles.emptyState}>
               <h3>Пока пусто</h3>
               <p>
-                Создайте первый документ или импортируйте JSON из старого WriterToolkit.
+                Создайте первый документ или импортируйте JSON.
               </p>
             </div>
           ) : (
