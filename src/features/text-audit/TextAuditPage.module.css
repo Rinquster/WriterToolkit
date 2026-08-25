@@ -1,0 +1,414 @@
+.workspace {
+  width: 100%;
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--page-padding) var(--space-12);
+}
+
+.headerActions,
+.totals,
+.toolbar,
+.matchNav,
+.option,
+.searchField {
+  display: flex;
+  align-items: center;
+}
+
+.headerActions {
+  gap: var(--space-3);
+}
+
+.totals {
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.totals strong {
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.totals strong + span {
+  margin-right: var(--space-2);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.headerActions .chips {
+  flex-wrap: nowrap;
+}
+
+.chip {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  white-space: nowrap;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.chip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  background: var(--layer, var(--color-border-strong));
+  border-radius: 50%;
+}
+
+.chip:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+}
+
+.chip small {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chip[aria-pressed='true'] {
+  color: var(--color-text-primary);
+  background: color-mix(in srgb, var(--layer) 18%, var(--color-bg-elevated));
+  border-color: color-mix(in srgb, var(--layer) 70%, transparent);
+}
+
+.chip[aria-pressed='true'] small {
+  color: var(--color-text-secondary);
+}
+
+.dangerButton {
+  min-height: 34px;
+  padding: 0 var(--space-3);
+  color: var(--color-warning-text);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.dangerButton:hover {
+  background: var(--color-bg-hover);
+}
+
+.toolbar {
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+.searchField {
+  min-width: min(340px, 100%);
+  flex: 1 1 260px;
+  gap: var(--space-2);
+}
+
+.searchField span {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.searchField input {
+  min-height: 34px;
+  width: 100%;
+  padding: 0 var(--space-3);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.searchField input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.option {
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.matchNav {
+  gap: var(--space-2);
+  margin-left: auto;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.matchNav button {
+  width: 32px;
+  height: 32px;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.matchNav button:hover:not(:disabled) {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+}
+
+.matchNav button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.draftError,
+.loading {
+  padding: var(--space-2) var(--space-3);
+  font-size: 13px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.draftError {
+  color: var(--color-warning-text);
+  background: var(--color-warning-subtle);
+  border-color: var(--color-warning-border);
+}
+
+.loading {
+  color: var(--color-text-muted);
+}
+
+/* Слой подсветки и поле ввода обязаны совпадать по метрике до пикселя. */
+.editor {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+.editor:focus-within {
+  border-color: var(--color-accent-border);
+}
+
+.backdrop,
+.input {
+  padding: var(--space-4);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.72;
+  tab-size: 4;
+  text-align: left;
+  scrollbar-gutter: stable;
+}
+
+.input {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 420px;
+  display: block;
+  resize: vertical;
+  overflow-y: auto;
+  color: transparent;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  caret-color: var(--color-text-primary);
+  background: transparent;
+  border: 0;
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Полупрозрачное выделение, чтобы текст нижнего слоя оставался читаемым. */
+.input::selection {
+  color: transparent;
+  background: color-mix(in srgb, var(--color-accent) 45%, transparent);
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.highlights {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.highlights span[data-layer] {
+  border-radius: 2px;
+  box-decoration-break: clone;
+  background: color-mix(in srgb, var(--layer) 32%, transparent);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--layer) 85%, transparent);
+}
+
+/* Пробельные артефакты не имеют глифа — им нужна плотная заливка. */
+.highlights span[data-layer='whitespace'],
+.highlights span[data-layer='extraSpace'],
+.highlights span[data-layer='trailingSpace'],
+.highlights span[data-layer='spaceBeforePunctuation'] {
+  background: color-mix(in srgb, var(--layer) 55%, transparent);
+}
+
+/* Символы нулевой ширины видны только как рамка, не смещающая текст. */
+.highlights span[data-layer='invisible'] {
+  background: color-mix(in srgb, var(--layer) 60%, transparent);
+  box-shadow: 0 0 0 2px var(--layer);
+}
+
+.highlights span[data-layer='search'] {
+  color: var(--color-text-primary);
+}
+
+.inputLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.cyrillic {
+  --layer: #6aa6ff;
+}
+
+.latin {
+  --layer: #f0b34a;
+}
+
+.punctuation {
+  --layer: #b98cff;
+}
+
+.digit {
+  --layer: #4fd1c5;
+}
+
+.whitespace {
+  --layer: #8a98ab;
+}
+
+.other {
+  --layer: #ff7a7a;
+}
+
+.mixedScript {
+  --layer: #ff5c5c;
+}
+
+.extraSpace {
+  --layer: #ffb020;
+}
+
+.trailingSpace {
+  --layer: #ff8f3d;
+}
+
+.spaceBeforePunctuation {
+  --layer: #e0a13c;
+}
+
+.invisible {
+  --layer: #ff3d81;
+}
+
+.typography {
+  --layer: #a48bff;
+}
+
+.repeatedWord {
+  --layer: #ff6fd8;
+}
+
+.fillerWord {
+  --layer: #59c98a;
+}
+
+.search {
+  --layer: #2f8fff;
+}
+
+.fillerEditor {
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+.fillerEditor summary {
+  cursor: pointer;
+}
+
+.fillerEditor label {
+  display: block;
+  margin: var(--space-3) 0 var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.fillerEditor textarea {
+  width: 100%;
+  display: block;
+  resize: vertical;
+  padding: var(--space-3);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  line-height: 1.6;
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.fillerEditor button {
+  min-height: 32px;
+  margin-top: var(--space-2);
+  padding: 0 var(--space-3);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.safetyNote {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 719px) {
+  .matchNav {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+  }
+}
