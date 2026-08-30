@@ -217,6 +217,81 @@
   margin: var(--space-2) 0 0;
 }
 
+/* Приёмник файлов: пунктирная рамка и на пустой библиотеке, и в конце сетки. */
+.dropZone {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  color: var(--color-text-primary);
+  font: inherit;
+  text-align: center;
+  background: var(--color-bg-surface);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.emptyDropZone {
+  margin: var(--space-5) 0 0;
+  padding: var(--space-8);
+}
+
+.dropTile {
+  min-height: 188px;
+  padding: var(--space-5);
+}
+
+.dropZone:hover:not(:disabled),
+.dropZoneArmed {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-accent-border);
+}
+
+/* Файл висит прямо над зоной — подтверждаем, что бросать можно здесь. */
+.dropZoneOver {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+}
+
+.dropZone:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.dropIcon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--color-accent-text);
+  font-size: 18px;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: 50%;
+}
+
+.dropZoneArmed .dropIcon,
+.dropZoneOver .dropIcon {
+  border-color: var(--color-accent);
+}
+
+.dropTitle {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.dropHint {
+  max-width: 46ch;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .documentGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));

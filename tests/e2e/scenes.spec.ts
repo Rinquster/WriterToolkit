@@ -88,6 +88,45 @@ test('imports and exports the legacy projection without changing content', async
   expect(project(exported)).toEqual(project(legacyFixture));
 });
 
+test('imports a JSON file dropped on the drop zone and keeps the zone available', async ({
+  page,
+}) => {
+  await page.goto('scenes');
+  await expect(page.getByTestId('scenes-dropzone')).toBeVisible();
+
+  const dropped = await page.evaluateHandle((json: string) => {
+    const transfer = new DataTransfer();
+    transfer.items.add(
+      new File([json], 'dropped-draft.json', { type: 'application/json' }),
+    );
+    return transfer;
+  }, JSON.stringify(legacyFixture));
+  await page.getByTestId('scenes-dropzone').dispatchEvent('drop', {
+    dataTransfer: dropped,
+  });
+
+  await expect(
+    page.getByRole('heading', { name: 'Импортировать «dropped-draft»?' }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Импортировать как новый' }).click();
+  await expect(page).toHaveURL(/\/WriterToolkit\/scenes\/[\w-]+$/);
+
+  // Зона остаётся в сетке, когда библиотека уже не пуста.
+  await page.goto('scenes');
+  await expect(page.getByRole('link', { name: /dropped-draft/ })).toBeVisible();
+  const zone = page.getByTestId('scenes-dropzone');
+  await expect(zone).toBeVisible();
+
+  const twoFiles = await page.evaluateHandle(() => {
+    const transfer = new DataTransfer();
+    transfer.items.add(new File(['[]'], 'a.json', { type: 'application/json' }));
+    transfer.items.add(new File(['[]'], 'b.json', { type: 'application/json' }));
+    return transfer;
+  });
+  await zone.dispatchEvent('drop', { dataTransfer: twoFiles });
+  await expect(page.getByText('Перетащите один файл')).toBeVisible();
+});
+
 test('reorders scenes through the keyboard drag-and-drop interaction and persists it', async ({
   page,
 }) => {
