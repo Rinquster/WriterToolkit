@@ -1,4 +1,11 @@
-import { useRef, useState, type ChangeEvent } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type DragEvent as ReactDragEvent,
+} from 'react';
 import { Link, useNavigate } from 'react-router';
 import AppHeaderContent from '../../design-system/components/AppHeaderContent';
 import StatusBadge from '../../design-system/components/StatusBadge';
@@ -29,6 +36,9 @@ export default function ScenesPage() {
   const [pendingImport, setPendingImport] = useState<PendingImport>();
   const [pendingDelete, setPendingDelete] = useState<SceneDocumentSummary>();
   const [importDiagnostics, setImportDiagnostics] = useState<LegacyDiagnostic[]>([]);
+  const [fileNearby, setFileNearby] = useState(false);
+  const [overDropZone, setOverDropZone] = useState(false);
+  const resultPanelRef = useRef<HTMLElement>(null);
 
   const handleCreate = async () => {
     try {
@@ -39,11 +49,7 @@ export default function ScenesPage() {
     }
   };
 
-  const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    event.target.value = '';
-    if (!file) return;
-
+  const importFile = useCallback(async (file: File) => {
     setReadingFile(true);
     setImportDiagnostics([]);
     setPendingImport(undefined);
@@ -72,7 +78,132 @@ export default function ScenesPage() {
     } finally {
       setReadingFile(false);
     }
+  }, []);
+
+  const importDroppedFiles = useCallback(
+    async (files: FileList | null) => {
+      if (!files || files.length === 0) return;
+      if (files.length > 1) {
+        setPendingImport(undefined);
+        setImportDiagnostics([
+          {
+            code: 'invalid-json',
+            path: '$',
+            message:
+              'Перетащите один файл: документы импортируются по одному, чтобы каждый можно было проверить.',
+            severity: 'error',
+          },
+        ]);
+        return;
+      }
+      const [file] = files;
+      if (file) await importFile(file);
+    },
+    [importFile],
+  );
+
+  const handleFileInput = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (file) await importFile(file);
   };
+
+  // Файл, брошенный мимо зоны, иначе открылся бы вместо приложения.
+  useEffect(() => {
+    let depth = 0;
+    const carriesFiles = (event: DragEvent) =>
+      Array.from(event.dataTransfer?.types ?? []).includes('Files');
+
+    const handleDragEnter = (event: DragEvent) => {
+      if (!carriesFiles(event)) return;
+      depth += 1;
+      setFileNearby(true);
+    };
+    const handleDragOver = (event: DragEvent) => {
+      if (!carriesFiles(event)) return;
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
+    };
+    const handleDragLeave = () => {
+      depth = Math.max(0, depth - 1);
+      if (depth === 0) setFileNearby(false);
+    };
+    const handleDrop = (event: DragEvent) => {
+      depth = 0;
+      setFileNearby(false);
+      setOverDropZone(false);
+      if (!carriesFiles(event)) return;
+      event.preventDefault();
+      void importDroppedFiles(event.dataTransfer?.files ?? null);
+    };
+
+    window.addEventListener('dragenter', handleDragEnter);
+    window.addEventListener('dragover', handleDragOver);
+    window.addEventListener('dragleave', handleDragLeave);
+    window.addEventListener('drop', handleDrop);
+    return () => {
+      window.removeEventListener('dragenter', handleDragEnter);
+      window.removeEventListener('dragover', handleDragOver);
+      window.removeEventListener('dragleave', handleDragLeave);
+      window.removeEventListener('drop', handleDrop);
+    };
+  }, [importDroppedFiles]);
+
+  // Результат проверки появляется выше библиотеки, а бросить файл можно и внизу.
+  useEffect(() => {
+    if (!pendingImport && importDiagnostics.length === 0) return;
+    resultPanelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [importDiagnostics, pendingImport]);
+
+  const dropZoneHandlers = {
+    onDragEnter: (event: ReactDragEvent<HTMLButtonElement>) => {
+      if (!event.dataTransfer.types.includes('Files')) return;
+      event.preventDefault();
+      setOverDropZone(true);
+    },
+    onDragOver: (event: ReactDragEvent<HTMLButtonElement>) => {
+      if (!event.dataTransfer.types.includes('Files')) return;
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'copy';
+    },
+    onDragLeave: (event: ReactDragEvent<HTMLButtonElement>) => {
+      if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+      setOverDropZone(false);
+    },
+  };
+
+  const renderDropZone = (variant: 'empty' | 'tile') => (
+    <button
+      type="button"
+      data-testid="scenes-dropzone"
+      className={[
+        styles.dropZone,
+        variant === 'empty' ? styles.emptyDropZone : styles.dropTile,
+        fileNearby ? styles.dropZoneArmed : '',
+        overDropZone ? styles.dropZoneOver : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      disabled={library.busy || readingFile}
+      onClick={() => fileInputRef.current?.click()}
+      {...dropZoneHandlers}
+    >
+      <span className={styles.dropIcon} aria-hidden="true">
+        ↓
+      </span>
+      <span className={styles.dropTitle}>
+        {readingFile
+          ? 'Проверяем файл…'
+          : variant === 'empty'
+            ? 'Пока пусто'
+            : 'Импортировать JSON'}
+      </span>
+      <span className={styles.dropHint}>
+        Перетащите сюда JSON-файл или нажмите, чтобы выбрать его на компьютере.
+        {variant === 'empty' && ' Пустой документ создаётся кнопкой в шапке страницы.'}
+      </span>
+    </button>
+  );
 
   const confirmImport = async () => {
     if (!pendingImport) return;
@@ -122,7 +253,7 @@ export default function ScenesPage() {
               className={styles.fileInput}
               type="file"
               accept="application/json,.json"
-              onChange={(event) => void handleFile(event)}
+              onChange={(event) => void handleFileInput(event)}
             />
           </div>
         }
@@ -131,6 +262,7 @@ export default function ScenesPage() {
       <div className={styles.content}>
         {importDiagnostics.length > 0 && (
           <section
+            ref={resultPanelRef}
             className={styles.errorPanel}
             role="alert"
             aria-labelledby="import-error-title"
@@ -153,7 +285,11 @@ export default function ScenesPage() {
         )}
 
         {pendingImport && (
-          <section className={styles.importPanel} aria-labelledby="import-title">
+          <section
+            ref={resultPanelRef}
+            className={styles.importPanel}
+            aria-labelledby="import-title"
+          >
             <div>
               <p className={styles.kicker}>Файл проверен</p>
               <h2 id="import-title">Импортировать «{pendingImport.document.name}»?</h2>
@@ -221,10 +357,7 @@ export default function ScenesPage() {
               Открываем локальную библиотеку…
             </p>
           ) : library.documents.length === 0 ? (
-            <div className={styles.emptyState}>
-              <h3>Пока пусто</h3>
-              <p>Создайте первый документ или импортируйте JSON.</p>
-            </div>
+            renderDropZone('empty')
           ) : (
             <ul className={styles.documentGrid}>
               {library.documents.map((document) => (
@@ -253,6 +386,7 @@ export default function ScenesPage() {
                   </button>
                 </li>
               ))}
+              <li className={styles.documentItem}>{renderDropZone('tile')}</li>
             </ul>
           )}
         </section>
