@@ -5,6 +5,7 @@ import { normalizeBase } from './routing';
 import styles from './App.module.css';
 
 const AboutPage = lazy(() => import('../features/about/AboutPage'));
+const AnalyzerPage = lazy(() => import('../features/analyzer/AnalyzerPage'));
 const DiffPage = lazy(() => import('../features/diff/DiffPage'));
 const HtmlTaggerPage = lazy(() => import('../features/html-tagger/HtmlTaggerPage'));
 const MarkdownPage = lazy(() => import('../features/markdown/MarkdownPage'));
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="diff" element={<DiffPage />} />
             <Route path="markdown" element={<MarkdownPage />} />
             <Route path="html" element={<HtmlTaggerPage />} />
+            <Route path="analyzer" element={<AnalyzerPage />} />
             <Route path="about" element={<AboutPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>

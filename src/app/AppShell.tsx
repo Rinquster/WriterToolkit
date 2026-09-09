@@ -9,6 +9,7 @@ const navigation = [
   { to: '/diff', label: 'Сравнение', shortLabel: 'Δ' },
   { to: '/markdown', label: 'Markdown', shortLabel: 'Md' },
   { to: '/html', label: 'Text → HTML', shortLabel: '<>' },
+  { to: '/analyzer', label: 'Анализатор', shortLabel: 'Ан' },
   { to: '/about', label: 'О приложении', shortLabel: 'i' },
 ] as const;
 

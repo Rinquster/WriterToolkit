@@ -1,5 +1,5 @@
 const DATABASE_NAME = 'writertoolkit';
-const DATABASE_VERSION = 1;
+const DATABASE_VERSION = 2;
 
 let databasePromise: Promise<IDBDatabase> | undefined;
 
@@ -21,6 +21,7 @@ export function openToolkitDatabase(): Promise<IDBDatabase> {
       createStore(database, 'drafts', 'id');
       createStore(database, 'preferences', 'key');
       createStore(database, 'recovery', 'id');
+      createStore(database, 'analyzerFiles', 'id');
     };
 
     request.onsuccess = () => {
